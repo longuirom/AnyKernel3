@@ -31,8 +31,6 @@ fi
 AK_FOLDER=/tmp/anykernel
 mount -o rw,remount -t auto /system_root > /dev/null
 
-rm /data/adb/ksud
-
 split_boot;
 ui_print "- Installing Kernel";
 flash_boot;
