@@ -32,7 +32,19 @@ AK_FOLDER=/tmp/anykernel
 mount -o rw,remount -t auto /system_root > /dev/null
 
 split_boot;
+unpack_ramdisk;
+
+# Replace existing ramdisk modules with modules shipped in the AnyKernel zip.
+find "$RAMDISK" -type f -name '*.ko' -exec rm -f {} \;
+mkdir -p "$RAMDISK/modules" || abort "Failed to create ramdisk module directory";
+for module in $(find "$AKHOME/modules" -type f -name '*.ko'); do
+    module_name=${module##*/}
+    cp -f "$module" "$RAMDISK/modules/$module_name" || abort "Failed to add module to ramdisk";
+    chmod 0644 "$RAMDISK/modules/$module_name" || abort "Failed to set module permissions";
+    ui_print "- Added ramdisk module: /modules/$module_name";
+done;
+
 ui_print "- Installing Kernel";
-flash_boot;
+write_boot;
 
 ui_print "- Installation finished successfully";
