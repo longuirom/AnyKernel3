@@ -71,6 +71,8 @@ done
 patch_prop "$SELINUX_PROP_FILE" ro.bootimage.permissive "$mode";
 ui_print "- Selected SELinux mode: $mode_name";
 
+rm -f "$SPLITIMG/kernel_dtb";
+
 ui_print "- Installing Kernel";
 write_boot;
 
